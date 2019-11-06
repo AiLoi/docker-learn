@@ -40,4 +40,6 @@ git@b1b54180a160:ailuoli/helloworld.git
 git@127.0.0.1:2222:ailuoli/helloworld.git
 
 # gitlab-runner-install
+```
 docker run -d --name gitlab-runner --restart always -v D:/Docker/data/gitlab-runner/config:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:latest
+```
