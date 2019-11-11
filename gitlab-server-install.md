@@ -42,6 +42,7 @@ git@127.0.0.1:2222:ailuoli/helloworld.git
 # gitlab-runner-install
 ```
 docker run -d --name gitlab-runner --restart always -v D:/Docker/data/gitlab-runner/config:/etc/gitlab-runner -v /var/run/docker.sock:/var/run/docker.sock gitlab/gitlab-runner:latest
+<<<<<<< HEAD
 
 docker exec -it gitlab-runner gitlab-runner register
 
@@ -49,3 +50,6 @@ if [ $(docker ps -aq -f name=web)]; then docker rm -f web;fi
 ```
 
 
+=======
+```
+>>>>>>> eeeb7397933d068f895f9f542809814c6b382615
