@@ -1,6 +1,6 @@
 [TOC]
 
-#docker-install
+# docker-install
 ```
 yum remove docker docker-client docker-client-latest docker-common  docker-latest docker-latest-logrotate docker-logrotate docker-engine
 sudo yum install -y yum-utils device-mapper-persistent-data  lvm2
@@ -8,7 +8,7 @@ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/dock
 sudo yum install -y docker-ce docker-ce-cli containerd.io
 ```
 
-#docker-machine-install
+# docker-machine-install
 
 版本可以替换
 ```
@@ -22,7 +22,7 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-#docker 阿里云加速
+# docker 阿里云加速
 ```
 sudo mkdir -p /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
@@ -33,20 +33,23 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
-#docker 开机自启
+# docker 开机自启
 
 `sudo systemctl enable docker`
 
-#docker-install-portainer
+# docker-install-portainer
 
 `docker run -d -p 19000:9000 --restart=always -v /var/run/docker.sock:/var/run/docker.sock --name cnooc_portainer portainer/portainer`
 
-#weavescope
+# weavescope
 ```
 curl -L git.io/scope -o /usr/local/bin/scope
 sudo chmod +x /usr/local/bin/scope
 scope launch 192.168.1.62
 ```
 
-
+# macvlan网络
+```
+docker run -d --restart=always --name dns-server -p 53:53/tcp -p 53:53/udp --cap-add=NET_ADMIN -v /docker/dnsmasq:/etc/dnsmasq  andyshinn/dnsmasq
+```
 
