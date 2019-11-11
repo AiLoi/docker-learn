@@ -302,11 +302,11 @@ yum install goaccess
 nohup goaccess access.log -o  ../html/report.html --real-time-html --time-format='%H:%M:%S' --date-format='%d-%b-Y' --log-format=COMBINED 
 ```
 
-# nginx申请tls证书
+# nginx申请SSL证书
 ```
 certbot --nginx --nginx-server-root=/home/nginx/nginx-home-1.17/conf/ -d ailuoli.cn
 ```
-```
+```shell
 使用前提
 1.将nginx 加入环境变量
 2.sudo yum install certbot python2-certbot-nginx
@@ -315,5 +315,139 @@ certbot --nginx --nginx-server-root=/home/nginx/nginx-home-1.17/conf/ -d ailuoli
 4.ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx
   ln -s /usr/local/nginx/conf/ /etc/nginx
 
+
+```
+
+# openresty
+```shell
+./configure --prefix=/home/learn/nginx --with-http_ssl_module
+gmake
+gmake install
+```
+# openresty 配置 基本使用lua
+```nginx
+
+#user  nobody;
+worker_processes  1;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    server {
+        listen       8060;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+
+
+	location /lua {
+		default_type text/html;
+		content_by_lua 'ngx.say("User-Agent: ", ngx.req.get_headers()["User-Agent"])';
+	}
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   127.0.0.1:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
+
+
+    # another virtual host using mix of IP-, name-, and port-based configuration
+    #
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+}
 
 ```
